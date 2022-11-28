@@ -16,9 +16,9 @@ router.post("/register", async (req, res) => {
 
   try {
     const savedUser = await newUser.save();
-    res.json(savedUser);
+    res.status(200).json(savedUser);
   } catch (err) {
-    res.json(err);
+    res.status(500).json(err);
   }
 });
 
@@ -47,6 +47,8 @@ router.post("/login", async (req, res) => {
       {expiresIn:"3d"}
     );
     const { password, ...others } = user._doc;
+      req.session.user = user;
+      req.session.save();
       
     res.json({...others, accesstoken});
   } catch (err) {
@@ -54,4 +56,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
+
+router.get("/logout", (req,res)=>{
+  req.session.destroy();
+  res.json("user session deleted")
+})
 module.exports = router;

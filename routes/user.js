@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const { verifyToken, verifyTokenAndAuthorization } = require("./verifyToken");
+const CryptoJS = require("crypto-js");
 
 const router = require("express").Router();
 
@@ -24,5 +25,11 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+
+
+router.get("/user", (req,res)=>{
+    return res.send(req.session.user)
+})
 
 module.exports = router;
